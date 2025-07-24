@@ -1,0 +1,42 @@
+name: Build and Test VS Code Extension 
+
+on:
+  push:
+    branches: [ develop, feature/* ]  # Adjust branches as needed
+  pull_request:
+    types: [closed]
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      version-type:
+        description: 'Version bump type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  # Job for building and testing (runs on all events)
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Build and Test Extension
+      uses: suryakand/vscode-extension-publisher@main  # This would be the path to your reusable action
+      with:
+        vsce-pat: ${{ secrets.VSCE_PAT }}
+        skip-tests: 'false'
+        skip-lint: 'false'
+        create-github-release: 'false' # Just for building, won't actually create a release
+        upload-vsix-artifact: 'false' # Just for building, won't actually upload
+        publish-to-marketplace: 'false' # Just for building, won't actually publish new version to marketplace

@@ -1,0 +1,52 @@
+name: Build, Test and and Publish VS Code Extension
+
+on:
+  push:
+    branches:
+      - main  # Auto-publish on push to main branch
+    tags:
+      - 'v*'  # Also support manual tag-based publishing
+  pull_request:
+    types: [closed]
+    branches:
+      - main  # Auto-publish on pull request merge to main branch
+  workflow_dispatch:  # Allow manual triggering
+    inputs:
+      publish_type:
+        description: 'Type of release'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true) ||
+      (github.event_name == 'workflow_dispatch')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+      
+    - name: Publish Extension
+      uses: suryakand/vscode-extension-publisher@main  # Use the local action
+      with:
+        vsce-pat: ${{ secrets.VSCE_PAT }}
+        create-github-release: 'true'
+        upload-vsix-artifact: 'true'
+        publish-to-marketplace: 'true'        
+        skip-tests: 'false'
+        skip-lint: 'false'        
+        node-version: '18'
+        package-manager: 'npm'
+        version-bump-type: ${{ github.event.inputs.publish_type || 'auto' }}
+        pre-publish-script: 'npm run vscode:prepublish'
