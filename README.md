@@ -1,10 +1,13 @@
 # Publish a VS Code Extension to VS Code Marketplace
-This is a demo VS Code Extension project that leverage a custom GitHub action to publish the VS Code Extension to MicroSoft Visual Code marketplace. The goal of this project is to showcase the use of custom GitHub action and how it make it easy to build, test and publish extension.
+This is a demo VS Code Extension project that leverage a custom [VS Code Extension Publisher - GitHub Action](https://github.com/suryakand/vscode-extension-publisher) to publish the VS Code Extension to MicroSoft Visual Studio Code marketplace. 
+
+The goal of this project is to showcase the use of custom GitHub action and how it make it easy to build, test and publish VS Code extension.
 
 Link to Custom GitHub action: [VS Code Extension Publisher - GitHub Action](https://github.com/suryakand/vscode-extension-publisher)
 
 Read more about the custom GitHub action: [Detail of GitHub Action](https://github.com/suryakand/vscode-extension-publisher)
 
+![GitHub Action](images/vscode-extension-publishe-github-action.png)
 ## Features of the custom GitHub Action
 
 - 🏗️ **Build & Test**: Automatically builds and tests your extension
